@@ -5,7 +5,7 @@
 - 非順序対: 並び順を意識しない組み合わせ -> {1,2} = {2,1}  
 ※ CROSS JOINは結合条件が存在せず、総当たりで全レコードの組み合わせを列挙するため、コストが高い
 ``` sql
--- 順序対(重複あり)
+-- 重複順列
 SELECT
 	p1.name as name_1
 	,p2.name as name_2
@@ -29,7 +29,7 @@ name_1	name_2
 <りんご,りんご>のような冗長を削除する  
 **別名(エイリアス)が与えられたなら、同一テーブルでもSQLでは異なるテーブル(集合)とみなされる**
 ``` sql
--- 順序対(重複なし)
+-- 順列
 SELECT
 	p1.name as name_1
 	,p2.name as name_2
@@ -46,6 +46,25 @@ name_1	name_2
 バナナ	りんご
 りんご	みかん
 バナナ	みかん
+りんご	バナナ
+みかん	バナナ
+```
+<りんご, みかん>,<みかん, りんご>のようなペアを削除する
+``` sql
+-- 組み合わせ
+SELECT
+	p1.name as name_1
+	,p2.name as name_2
+FROM
+	Chapter3Products as p1
+INNER JOIN
+	Chapter3Products as p2
+ON
+	p1.name > p2.name
+
+-- result
+name_1	name_2
+りんご	みかん
 りんご	バナナ
 みかん	バナナ
 ```
