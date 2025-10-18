@@ -36,3 +36,26 @@ name	age	city
 1. ALLをANDに同値変換「(age < 22) AND (age < 23) AND (age < NULL)」
 1. NULLに<を適用すると「(age <> 22) AND (age <> 23) AND (age <> unknown)」
 1. AND演算にunknownがあるとtrueにならない
+
+## 限定述語と極値関数は同値でない
+極値関数でSQLを書きなおす  
+※Class_Bの山田のageをNULLに修正した
+``` sql
+SELECT * FROM Chapter4Class_A
+WHERE
+	age < (
+		SELECT MIN(age) FROM Chapter4Class_B
+		WHERE
+			Chapter4Class_B.city = '東京')
+
+-- result
+name	age	city
+ラリー	19	埼玉
+ボギー	21	千葉
+```
+限定述語のALLとは異なり極値関数MINではNULLを含んでいても次点の斎藤のage22で判定してくれる  
+-> **極値関数が集計時にNULLを排除する特性があるため = NULLがなかったかのように扱う**  
+限定述語(ALL)と極値関数を命題は以下である  
+- ALL: 彼は東京在住の生徒の誰よりも若い
+- 極値関数: 彼は東京在住の生徒の最も若い生徒よりも若い  
+現実では同じことをいっているが、NULLが含まれていると意味が異なる
