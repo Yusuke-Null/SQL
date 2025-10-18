@@ -57,5 +57,46 @@ name	age	city
 -> **極値関数が集計時にNULLを排除する特性があるため = NULLがなかったかのように扱う**  
 限定述語(ALL)と極値関数を命題は以下である  
 - ALL: 彼は東京在住の生徒の誰よりも若い
-- 極値関数: 彼は東京在住の生徒の最も若い生徒よりも若い  
-現実では同じことをいっているが、NULLが含まれていると意味が異なる
+- 極値関数: 彼は東京在住の生徒の最も若い生徒よりも若い
+
+現実では同じことをいっているが、NULLが含まれていると意味が異なる  
+
+さらに述語(関数)の入力が空集合の場合にも同値でなくなる  
+Class_B(東京在住者がいないケース)
+|name|age|city|
+|:----|:----|:----|
+|和泉|18|千葉|
+|武田|20|千葉|
+|石川|19|神奈川|
+
+- ALL: Aクラス全員が選択される
+- 極値関数: 誰も選択されない
+``` sql
+-- ALL
+SELECT * FROM Chapter4Class_A
+WHERE
+	age < ALL (
+		SELECT age FROM Chapter4Class_B_NotToKyo
+		WHERE
+			Chapter4Class_B_NotToKyo.city = '東京')
+
+-- result
+name	age	city
+ブラウン	22	東京
+ラリー	19	埼玉
+ボギー	21	千葉
+
+-- 極値関数
+SELECT * FROM Chapter4Class_A
+WHERE
+	age < (
+		SELECT MIN(age) FROM Chapter4Class_B_NotToKyo
+		WHERE
+			Chapter4Class_B_NotToKyo.city = '東京')
+
+-- result
+name	age	city
+```
+
+
+
