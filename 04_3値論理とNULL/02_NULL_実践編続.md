@@ -49,7 +49,7 @@ WHERE
 -- result
 name	age	city
 ```
-条件部分は以下の様に考えられる
+条件部分は以下の様に考えられる  
 1.「age NOT IN(22, 23, NULL)」  
 1. NOTとINに同値変換「NOT age IN(22, 23, NULL)」
 1. ORに同値変換「NOT((age = 22) OR (age = 23) OR (age = NULL))」
@@ -57,4 +57,5 @@ name	age	city
 1. NOTと=を<>で同値変換「(age <> 22) AND (age <> 23) AND (age <> NULL)」
 1. NULLに<>を適用すると「(age <> 22) AND (age <> 23) AND (age <> unknown)」
 1. AND演算にunknownがあるとtrueにならない
+
 **NOT INのサブクエリで使用されるテーブルの選択列にNULLがあるとSQLの結果は常に空になる** 
