@@ -58,4 +58,28 @@ name	age	city
 1. NULLに<>を適用すると「(age <> 22) AND (age <> 23) AND (age <> unknown)」
 1. AND演算にunknownがあるとtrueにならない
 
-**NOT INのサブクエリで使用されるテーブルの選択列にNULLがあるとSQLの結果は常に空になる** 
+**NOT INのサブクエリで使用されるテーブルの選択列にNULLがあるとSQLの結果は常に空になる**  
+
+EXISTS述語を使うと正しい結果になる
+``` sql
+SELECT * FROM Chapter4Class_A
+WHERE
+	NOT EXISTS (
+		SELECT * FROM Chapter4Class_B
+		WHERE
+			Chapter4Class_B.city = '東京'
+		AND
+			Chapter4Class_A.age = Chapter4Class_B.age)
+
+--result
+name	age	city
+ラリー	19	埼玉
+ボギー	21	千葉
+```
+条件のプロセスは以下  
+1. 「Class_B.city = '東京' AND Class_A.age = null」
+2. 「Class_B.city = '東京' AND unknown」
+3.  WHERE false または unknown
+4.  サブクエリが結果を返さない = NOT EXISTSはtrueになる
+
+**EXISTSはtrueかfalseしか返さない**
