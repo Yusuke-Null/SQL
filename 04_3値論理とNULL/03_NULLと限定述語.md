@@ -31,4 +31,8 @@ WHERE
 name	age	city
 ラリー	19	埼玉
 ```
-ただし、最も若い山田のageがNULLの場合は結果は空欄になる
+ただし、最も若い山田のageがNULLの場合は結果は空欄になる  
+1. 「age < ALL(22, 23, NULL)」
+1. ALLをANDに同値変換「(age < 22) AND (age < 23) AND (age < NULL)」
+1. NULLに<を適用すると「(age <> 22) AND (age <> 23) AND (age <> unknown)」
+1. AND演算にunknownがあるとtrueにならない
