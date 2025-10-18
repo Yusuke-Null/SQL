@@ -50,7 +50,7 @@ WHERE
 name	age	city
 ```
 条件部分は以下の様に考えられる  
-1.「age NOT IN(22, 23, NULL)」  
+1. 「age NOT IN(22, 23, NULL)」  
 1. NOTとINに同値変換「NOT age IN(22, 23, NULL)」
 1. ORに同値変換「NOT((age = 22) OR (age = 23) OR (age = NULL))」
 1. ドモルガンの法則で同値変換「NOT(age = 22) AND NOT(age = 23) AND NOT(age = NULL)」
