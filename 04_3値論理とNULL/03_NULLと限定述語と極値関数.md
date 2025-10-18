@@ -97,6 +97,8 @@ WHERE
 -- result
 name	age	city
 ```
-
+条件が「age < NULL」となり、結果unknownになる
+**極値関数は空集合の場合はnullを返す仕様の為**  
+全件返すのか1行も返さないのか、仮に全行返すならALLを使うか、COALSECE関数でNULLを置換して極値関数を使うかは要件による
 
 
