@@ -60,6 +60,21 @@ CS300	0	完了
 CS300	1	完了
 CS300	2	待機
 CS300	3	待機
+
+-- ALLを使用したケース
+-- 全行に目印となる値を付ける必要があるためNOT EXISTS程のパフォーマンスではない
+SELECT * FROM Chapter5Projects as p1
+WHERE
+	1 = ALL(
+		SELECT
+			CASE
+				WHEN p2.step_nbr <= 1 AND p2.status = '完了' THEN 1
+				WHEN 1 < p2.step_nbr AND p2.status = '待機' THEN 1
+				ELSE 0
+			END
+		FROM Chapter5Projects as p2
+		WHERE
+			p1.project_id = p2.project_id)
 ```
 
 ### 列に対する量化-オール1の行を探せ
