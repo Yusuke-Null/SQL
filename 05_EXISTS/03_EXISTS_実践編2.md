@@ -61,3 +61,31 @@ CS300	1	完了
 CS300	2	待機
 CS300	3	待機
 ```
+
+### 列に対する量化-オール1の行を探せ
+下記のような配列をそのまま写し取ったくそテーブルがあるとする    
+**列の増減は影響が大きいため、持続的な構造を考えるべき**  
+-> 配列の要素はテーブルの列でなく行に相当すると考えるべき
+|key_value|col1|col2|col3|col4|col5|col6|col7|col8|col9|col10|
+|:----|:----|:----|:----|:----|:----|:----|:----|:----|:----|:----|
+|A|NULL|NULL|NULL|NULL|NULL|NULL|NULL|NULL|NULL|NULL|
+|B|3|NULL|NULL|NULL|NULL|NULL|NULL|NULL|NULL|NULL|
+|C|1|1|1|1|1|1|1|1|1|1|
+|D|NULL|NULL|9|NULL|NULL|NULL|NULL|NULL|NULL|NULL|
+|E|NULL|3|NULL|1|9|NULL|NULL|9|NULL|NULL|
+
+EX) オール1の行を探す
+※ SQL ServerではALLとANYはスカラ値またはサブクエリによる単一列しか使えない
+``` sql
+SELECT key_value FROM Chapter5ArrayTbl
+WHERE
+	1 = ALL(col1,col2,col3,col4,col5,col6,col7,col8,col9,col10)
+
+```
+EX) 少なくとも1つは9の行を探す
+``` sql
+-- INでも成り立つ
+SELECT key_value FROM Chapter5ArrayTbl
+WHERE
+	9 = ANY(col1,col2,col3,col4,col5,col6,col7,col8,col9,col10)
+```
