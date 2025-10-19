@@ -109,7 +109,7 @@ student_id
 400
 ```
 2教科分のレコードが必要なことをHAVINGで条件指定すれば400を省ける
-```
+```　sql
 SELECT student_id FROM Chapter5TestScores as t1
 WHERE
 	t1.subject IN('算数','国語')
