@@ -74,7 +74,7 @@ CS300	3	待機
 |D|NULL|NULL|9|NULL|NULL|NULL|NULL|NULL|NULL|NULL|
 |E|NULL|3|NULL|1|9|NULL|NULL|9|NULL|NULL|
 
-EX) オール1の行を探す
+EX) オール1の行を探す  
 ※ SQL ServerではALLとANYはスカラ値またはサブクエリによる単一列しか使えない
 ``` sql
 SELECT key_value FROM Chapter5ArrayTbl
