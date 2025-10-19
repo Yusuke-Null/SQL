@@ -60,7 +60,6 @@ EXCEPT
 |300|算数|40|
 |300|国語|90|
 |300|社会|55|
-|300|社会|55|
 |400|算数|80|
 
 EX) 全教科50点以上の生徒  
@@ -84,10 +83,13 @@ student_id
 
 EX2) 算数が80点以上かつ国語が50点以上  
 ある学生の全行について、算数なら80点以上かつ、国語なら50点以上という全称量化であり  
-同一の集合内の行での条件分岐はCASE式で表現できる
+同一の集合内の行での条件分岐はCASE式で表現できる  
+下記は国語のデータがない400の生徒も出力する
 ``` sql
 SELECT DISTINCT student_id FROM Chapter5TestScores as t1
 WHERE
+	t1.subject IN('算数','国語')
+AND
 	NOT EXISTS(
 		SELECT * FROM Chapter5TestScores as t2
 		WHERE
@@ -105,4 +107,31 @@ student_id
 100
 200
 400
+```
+2教科分のレコードが必要なことをHAVINGで条件指定すれば400を省ける
+```
+SELECT student_id FROM Chapter5TestScores as t1
+WHERE
+	t1.subject IN('算数','国語')
+AND
+	NOT EXISTS(
+		SELECT * FROM Chapter5TestScores as t2
+		WHERE
+			t1.student_id = t2.student_id
+		AND
+			1 = CASE
+					WHEN t2.subject = '算数' AND t2.score < 80 THEN 1
+					WHEN t2.subject = '国語' AND t2.score < 50 THEN 1
+				ELSE
+					0
+				END)
+GROUP BY
+	student_id
+HAVING
+	COUNT(*) = 2;
+
+--result
+student_id
+100
+200
 ```
