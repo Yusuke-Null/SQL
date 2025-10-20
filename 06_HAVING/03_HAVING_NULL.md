@@ -61,7 +61,6 @@ dpt
 
 ### 特性関数の応用
 CASE式は各要素(行)が特定の条件を満たす集合かを決める関数 = 特性関数の1つである  
-EX) クラスの75%が80点以上のクラスを求める
 |student_id|class|sex|score|
 |:----|:----|:----|:----|
 |001|A|男|100|
@@ -80,6 +79,7 @@ EX) クラスの75%が80点以上のクラスを求める
 |014|D|女|0|
 |015|D|女|0|
 
+EX) クラスの75%が80点以上のクラスを求める
 ``` sql
 SELECT class FROM Chapter6TestResults
 GROUP BY
@@ -94,4 +94,26 @@ HAVING
 -- result
 class
 B
+```
+
+EX) 男子の数が女子の数より多いクラスを求める
+``` sql
+SELECT class FROM Chapter6TestResults
+GROUP BY
+	class
+HAVING
+	SUM(
+		CASE
+			WHEN sex = '男' THEN 1
+			ELSE 0
+		END) <
+	SUM(
+		CASE
+			WHEN sex = '女' THEN 1
+			ELSE 0
+		END)
+
+-- result
+class
+D
 ```
