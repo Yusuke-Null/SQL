@@ -1,4 +1,4 @@
-# HAVING_NULL
+# HAVING_NULL_特性関数
 ## NULLを含まない集合を探す
 COUNT(*)とCOUNT(列名)には以下の違いある
 1. パフォーマンス
@@ -95,7 +95,6 @@ HAVING
 class
 B
 ```
-
 EX) 男子の数が女子の数より多いクラスを求める
 ``` sql
 SELECT class FROM Chapter6TestResults
@@ -104,16 +103,45 @@ GROUP BY
 HAVING
 	SUM(
 		CASE
-			WHEN sex = '男' THEN 1
+			WHEN sex = '女' THEN 1
 			ELSE 0
 		END) <
 	SUM(
 		CASE
-			WHEN sex = '女' THEN 1
+			WHEN sex = '男' THEN 1
 			ELSE 0
 		END)
 
 -- result
 class
-D
+B
+C
 ```
+EX) 女子の平均点が男子の平均点より高いクラスを求める
+``` sql
+SELECT class FROM Chapter6TestResults
+GROUP BY
+	class
+HAVING
+	AVG(
+		CASE 
+			WHEN sex = '男' THEN score
+			ELSE NULL
+		END) <
+	AVG(
+		CASE
+			WHEN sex = '女' THEN score
+			ELSE NULL
+		END)
+
+-- result
+class
+A
+```
+ELSEが0でなくNULLの理由
+Dクラスは女子しかいないため、男子の平均点は常に0となってしまう  
+-> 男子は平均点が算出できない、つまり空集合を0で代用するのではなく未定義とするのが適切
+集約関数であるAVGは空集合を適用した場合、NULLを返す仕様である  
+
+集合の性質に着目することは個々の要素を無視するということである  
+例題はクラスの集団としての特徴や傾向性に目を向け、個人が何点取ったかは選択しない
