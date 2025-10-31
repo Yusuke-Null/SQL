@@ -1,0 +1,1 @@
+# GROUP BYとPARTITION BYの違い
