@@ -25,7 +25,7 @@ cond(
     ((= x 2) 'xは2です')
       (t 'xは1です'))
 ```
--- sql
+--- sql
 CASE WHEN x = 1 THEN 'xは1です'
   WHEN x = 2 THEN 'xは2です'
   ELSE 'xはそれ以外です'
